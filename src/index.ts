@@ -4,6 +4,7 @@ import { covertToTsCommand } from './commands/covertToTs';
 import { generateUnittestCommand } from './commands/generateUnittest';
 import { refactorCommand } from './commands/refactor';
 import { freeCommand } from './commands/free';
+import { calcTokenCommand } from './commands/calcToken';
 
 yargs
   .demandCommand()
@@ -11,6 +12,7 @@ yargs
   .command(generateUnittestCommand)
   .command(refactorCommand)
   .command(freeCommand)
+  .command(calcTokenCommand)
   .alias('h', 'help')
   .scriptName('fileai')
   .parse();
