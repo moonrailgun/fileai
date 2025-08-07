@@ -144,36 +144,45 @@ async function generateChangelog(
       : undefined,
   });
 
-  const prompt = `You are a professional software developer tasked with creating concise and informative changelog entries.
+  const prompt = `Generate a changelog entry from the git diff below.
 
-Analyze the following git diff content and generate a brief, clear changelog entry that summarizes the changes made.
+**Goal**: Create user-focused changelog entries that highlight business value.
 
-Requirements:
-- Be concise and to the point
-- Focus on user-facing changes and important technical improvements
-- Use clear, professional language
-- Group related changes together
-- Avoid technical jargon unless necessary
+**Style Guidelines**:
+- Write in ${language}
+- Use business-friendly language (avoid technical jargon)
+- Focus on user impact and feature improvements
+- Keep entries concise (under 100 characters when possible)
 - Use bullet points for multiple changes
-- Keep each entry under 100 characters when possible
-- Write from a business perspective, highlighting the value and impact to users or business goals
-- Emphasize how the changes affect product features, user experience, or business outcomes
-- Avoid using technical terms unless necessary. You are a business person, not a developer.
-- Please use ${language} as the language of the changelog
 
-Git diff content:
+**Content Requirements**:
+- Summarize what changed from a user perspective
+- Group related changes together
+- If there are multiple authors, group changes by author and include their name (e.g., "by @username")
+- If all changes are by the same author, do not mention the author
+- Emphasize product features, UX improvements, or business outcomes
+
+**Example Format**:
+- Added new dashboard widgets for better analytics by @john
+- Fixed login timeout issues affecting mobile users by @sarah`;
+
+  const userMessage = `Here is git diff:
+
 \`\`\`
 ${diffContent}
 \`\`\`
-
-Generate a changelog entry:`;
+`;
 
   const response = await openai.chat.completions.create({
     model: modelName,
     messages: [
       {
-        role: 'user',
+        role: 'system',
         content: prompt,
+      },
+      {
+        role: 'user',
+        content: userMessage,
       },
     ],
     temperature: 0.3,
